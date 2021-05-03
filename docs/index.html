@@ -19,10 +19,28 @@
     section.cover.show {
       height: 100%;
     }
+    a.anchor span {
+      font-size: 24px;
+    }
   </style>
-  <script src="//unpkg.com/docsify-edit-on-github/index.js"></script>
 </head>
 <body>
+<nav style="position: fixed">
+  [<a onclick="viewlist()">ALL</a>|
+  <a onclick="viewlist('off')">OFF</a>|
+  <ul style="padding-left:0">
+    <li>Category
+      <ul>
+        <li><a onclick="viewlist('internet')"><img src="_media/internet.png">インターネット</a></li>
+        <li><a onclick="viewlist('game')"><img src="_media/game.png">ゲーム</a></li>
+        <li><a onclick="viewlist('manga')"><img src="_media/manga.png">マンガ</a></li>
+        <li><a onclick="viewlist('anime')"><img src="_media/anime.png">アニメ</a></li>
+        <li><a onclick="viewlist('music')"><img src="_media/music.png">音楽</a></li>
+      </ul>
+    </li>
+  </ul>
+  ]
+</nav>
 <div id="app"></div>
 <script>
   // NOTICE ↓ここを削除するとカバーページが表示されなくなる（なんで？
@@ -34,13 +52,29 @@
     auto2top: true,
     coverpage: true,
     hideSidebar: true,
-    plugins: [
-      EditOnGithubPlugin.create(
-        repo + '/blob/master/docs/',
-        null,
-        '📝 Edit on GitHub',
-      )
-    ],
+  }
+
+  function viewlist(category = "all") {
+    const root = document.getElementsByClassName("markdown-section")[0];
+    const nodes = root.getElementsByTagName("li");
+    for (node of nodes) {
+      if (category === "all") {
+        node.style.display = "list-item";
+        continue
+      }
+      if (category === "off") {
+        node.style.display = "none";
+        continue
+      }
+
+      const img = node.firstChild
+      if (img != null && img.tagName === "IMG" && img.alt === category) {
+        node.style.display = "list-item";
+      } else {
+        node.style.display = "none";
+      }
+    }
+    return false;
   }
 </script>
 
